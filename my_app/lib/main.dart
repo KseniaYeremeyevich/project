@@ -8,11 +8,18 @@ import 'package:my_app/dbelavia.dart';
 import 'package:my_app/datelist.dart';
 import 'package:my_app/preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import  'package:logger/logger.dart';
 
 final dbBelavia = DBelavia.instance;
 DateList lDates;
-//SharedPreferencesHelper myPref;
 String curLang;
+
+var logger = Logger(
+  filter: null, // Use the default LogFilter (-> only log in debug mode)
+  printer: PrettyPrinter(methodCount: 0),//PrettyPrinter(), // Use the PrettyPrinter to format and print log
+  output: null, // Use the default LogOutput (-> send everything to console)
+);
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +30,14 @@ void main() async{
         DateFormat("yyyy-MM-dd").format(DateTime.now().add(Duration(days: 1)))
       ]
   );
+  logger.i('Read Preferences');
   curLang = await SharedPreferencesHelper.getLanguageCode();
+  logger.i('Clean DB');
   final delItems = await dbBelavia.cleanDB();
+  logger.i('deleted rows: $delItems');
+  logger.i('Load data from web service to DB...');
   await dbBelavia.loadDB(lDates);
+  logger.i('Data was loaded');
 
   runApp(
     new MaterialApp(

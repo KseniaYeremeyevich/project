@@ -139,9 +139,9 @@ class DBelavia {
   
   Future<int> cleanDB() async {
     final rowsDeleted = await cleanAirport();
-    print('Airports deleted rows:  $rowsDeleted');
+    //print('Airports deleted rows:  $rowsDeleted');
     final rowsDeletedF = await cleanFlight();
-    print('Flights deleted rows:  $rowsDeletedF');
+    //print('Flights deleted rows:  $rowsDeletedF');
     return rowsDeleted + rowsDeletedF;
   }
   
